@@ -398,28 +398,28 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     // Terms and Conditions Box - FIXED: Increased height to accommodate payment terms
     const termsBoxY = bankBoxY + 40
-    drawBox(30, termsBoxY, width - 60, 115) // Increased height from 100 to 115
+    drawBox(30, termsBoxY, width - 60, 100) // Decreased height from 115 to 100
 
     drawText("Terms & Conditions:", 40, termsBoxY + 15, { size: 8, bold: true })
     drawText(
       "(1) We do not hold responsible for any breakage/demage/shortage/leakage in transit.",
       40,
-      termsBoxY + 30,
+      termsBoxY + 25,
       { size: 7 },
     )
-    drawText("(2) Our responsibility ceases when the goods are delivered to the carrier.", 40, termsBoxY + 45, {
+    drawText("(2) Our responsibility ceases when the goods are delivered to the carrier.", 40, termsBoxY + 35, {
       size: 7,
     })
-    drawText("(3) Goods once sold will not be accepted back.", 40, termsBoxY + 60, { size: 7 })
+    drawText("(3) Goods once sold will not be accepted back.", 40, termsBoxY + 45, { size: 7 })
 
     drawText(
       "(4) Interest @24% p.a. will be charged if invoice is not paid on or before due date.",
       40,
-      termsBoxY + 75,
+      termsBoxY + 55,
       { size: 7 },
     )
 
-    drawText("(5) Subject to Surat Jurisdiction.", 40, termsBoxY + 90, { size: 7 })
+    drawText("(5) Subject to Surat Jurisdiction.", 40, termsBoxY + 65, { size: 7 })
 
     // FIXED: Added payment terms inside the box
     const dueDate =
@@ -430,18 +430,18 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         return date
       })()
 
-    drawText(`Payment Within 10 Days. Due On: ${new Date(dueDate).toLocaleDateString("en-IN")}`, 40, termsBoxY + 105, {
+    drawText(`Payment Within 10 Days. Due On: ${new Date(dueDate).toLocaleDateString("en-IN")}`, 40, termsBoxY + 80, {
       size: 8,
       bold: true,
     })
 
     // Signature section - aligned to right side
-    drawText(`For ${COMPANY_DETAILS.name}`, width - 80, termsBoxY + 40, { 
+    drawText(`For ${COMPANY_DETAILS.name}`, width - 80, termsBoxY + 30, { 
       size: 8, 
       bold: true,
       align: "center" 
     })
-    drawText("Authorised Signatory", width - 80, termsBoxY + 100, { 
+    drawText("Authorised Signatory", width - 80, termsBoxY + 80, { 
       size: 8,
       align: "center" 
     })
