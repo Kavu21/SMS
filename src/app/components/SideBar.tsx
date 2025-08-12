@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Inventory2, People, Receipt } from "@mui/icons-material"
+import { Inventory2, People, Receipt, LocalOffer } from "@mui/icons-material"
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material"
 
@@ -11,6 +11,7 @@ const menuItems = [
   { text: "Products", icon: <Inventory2 />, path: "/products" },
   { text: "Customers", icon: <People />, path: "/customers" },
   { text: "Invoices", icon: <Receipt />, path: "/invoices" },
+  { text: "Categories", icon: <LocalOffer />, path: "/categories" },
 ]
 
 export default function Sidebar() {

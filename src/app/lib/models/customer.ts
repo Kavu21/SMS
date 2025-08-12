@@ -54,6 +54,10 @@ const customerSchema = new mongoose.Schema({
     required: true,
     default: "24-GUJARAT",
   },
+  categoryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+  },
   organizationId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,

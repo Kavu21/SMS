@@ -10,6 +10,17 @@ export interface PaginatedResponse<T> {
   }
 }
 
+export interface Category {
+  _id: string
+  name: string
+  description?: string
+  color: string
+  isActive: boolean
+  organizationId: string | ObjectId
+  createdAt: string
+  updatedAt: string
+}
+
 export interface Product {
   _id: string
   name: string
@@ -22,7 +33,8 @@ export interface Product {
   weight: number
   quantity: number
   unit: string
-  category: string
+  categoryId: string | ObjectId
+  category?: Category
   status: "available" | "sold"
   soldAt?: string
   invoiceId?: string
@@ -59,6 +71,8 @@ export interface Customer {
     zipCode: string
     country: string
   }
+  categoryId?: string | ObjectId
+  category?: Category
   organizationId: string | ObjectId
   createdAt: string
   updatedAt: string

@@ -7,8 +7,9 @@ import ProductsTable from "./products-table"
 import ProductFilters from "./product-filters"
 import type { Product, ProductsResponse } from "../types"
 
+
 export interface FilterValues {
-  category: string
+  categoryId: string
   gsmMin: string
   gsmMax: string
   rollNo: string
@@ -24,8 +25,9 @@ export default function ProductsPage() {
   const [limit, setLimit] = useState(10)
   const [total, setTotal] = useState(0)
   const [totals, setTotals] = useState<{ kg?: number; pieces?: number }>({})
+  const [organizationId, setOrganizationId] = useState<string>("")
   const [filters, setFilters] = useState<FilterValues>({
-    category: "",
+    categoryId: "",
     gsmMin: "",
     gsmMax: "",
     rollNo: "",
@@ -57,8 +59,26 @@ export default function ProductsPage() {
   }, [page, limit, filters])
 
   useEffect(() => {
-    fetchProducts()
-  }, [fetchProducts])
+    const fetchOrganizationId = async () => {
+      try {
+        const response = await fetch("/api/auth/me")
+        if (response.ok) {
+          const userData = await response.json()
+          setOrganizationId(userData.organizationId)
+        }
+      } catch (error) {
+        console.error("Error fetching organization ID:", error)
+      }
+    }
+
+    fetchOrganizationId()
+  }, [])
+
+  useEffect(() => {
+    if (organizationId) {
+      fetchProducts()
+    }
+  }, [fetchProducts, organizationId])
 
   const handleFilterChange = (newFilters: FilterValues) => {
     setFilters(newFilters)
@@ -93,7 +113,11 @@ export default function ProductsPage() {
           <Paper sx={{ p: 2, mb: 2 }}>
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={8}>
-                <ProductFilters filters={filters} onFilterChange={handleFilterChange} />
+                <ProductFilters 
+                  filters={filters} 
+                  onFilterChange={handleFilterChange} 
+                  organizationId={organizationId}
+                />
               </Grid>
               <Grid item xs={12} md={4}>
                 <Box sx={{ textAlign: "right" }}>

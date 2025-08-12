@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   Button,
   Dialog,
@@ -15,9 +15,10 @@ import {
   Alert,
 } from "@mui/material"
 import { Add } from "@mui/icons-material"
+import type { Category } from "../types"
+
 
 export const units = ["pieces", "kg"]
-export const categories = ["Napkin Grade", "Fasial Grade", "Toilet Grade", "Non Wowen", "Airlaid", "Colour"]
 
 interface AddProductProps {
   onProductAdded: () => void
@@ -27,6 +28,44 @@ export default function AddProduct({ onProductAdded }: AddProductProps) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [categories, setCategories] = useState<Category[]>([])
+  const [organizationId, setOrganizationId] = useState<string>("")
+
+    useEffect(() => {
+    const fetchOrganizationId = async () => {
+      try {
+        const response = await fetch("/api/auth/me")
+        if (response.ok) {
+          const userData = await response.json()
+          setOrganizationId(userData.organizationId)
+        }
+      } catch (error) {
+        console.error("Error fetching organization ID:", error)
+      }
+    }
+
+    fetchOrganizationId()
+  }, [])
+
+  useEffect(() => {
+    if (organizationId) {
+      fetchCategories()
+    }
+  }, [organizationId])
+
+  const fetchCategories = async () => {
+    if (!organizationId) return
+    
+    try {
+      const response = await fetch(`/api/categories?organizationId=${organizationId}`)
+      if (response.ok) {
+        const data = await response.json()
+        setCategories(data.categories)
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -45,7 +84,7 @@ export default function AddProduct({ onProductAdded }: AddProductProps) {
       weight: Number(formData.get("weight")),
       quantity: Number(formData.get("quantity")),
       unit: formData.get("unit") as string,
-      category: formData.get("category") as string,
+      categoryId: formData.get("categoryId") as string,
     }
 
     try {
@@ -152,10 +191,16 @@ export default function AddProduct({ onProductAdded }: AddProductProps) {
               </Grid>
              
               <Grid item xs={12} sm={6}>
-                <TextField required fullWidth select name="category" label="Category" defaultValue="">
+                <TextField required fullWidth select name="categoryId" label="Category" defaultValue="">
                   {categories.map((category) => (
-                    <MenuItem key={category} value={category}>
-                      {category}
+                    <MenuItem key={category._id} value={category._id}>
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: category.color }}
+                        ></div>
+                        {category.name}
+                      </div>
                     </MenuItem>
                   ))}
                 </TextField>

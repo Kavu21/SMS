@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 
-const uri = "mongodb+srv://roykapuriya:VOfBzgLm7aOgkokd@sms.jx3w1p1.mongodb.net/?retryWrites=true&w=majority&appName=SMS"
-
+// const uri = "mongodb+srv://roykapuriya:VOfBzgLm7aOgkokd@sms.jx3w1p1.mongodb.net/?retryWrites=true&w=majority&appName=SMS"
+const uri = "mongodb+srv://ajay:ajay123@cluster0.x252f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 if (!uri) {
   throw new Error("MONGODB_URI is missing")
 }

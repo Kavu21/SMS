@@ -1,16 +1,43 @@
 "use client"
 
 import { Grid, TextField, MenuItem } from "@mui/material"
+import { useEffect, useState } from "react"
 import type { FilterValues } from "./page"
-import { categories, units } from "./add-product"
+import { units } from "./add-product"
+import type { Category } from "../types"
 
 
 interface ProductFiltersProps {
   filters: FilterValues
   onFilterChange: (filters: FilterValues) => void
+  organizationId: string
 }
 
-export default function ProductFilters({ filters, onFilterChange }: ProductFiltersProps) {
+export default function ProductFilters({ filters, onFilterChange, organizationId }: ProductFiltersProps) {
+  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      if (!organizationId) return
+      
+      try {
+        setLoading(true)
+        const response = await fetch(`/api/categories?organizationId=${organizationId}&limit=100`)
+        if (response.ok) {
+          const data = await response.json()
+          setCategories(data.categories)
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCategories()
+  }, [organizationId])
+
   const handleChange = (field: keyof FilterValues, value: string) => {
     onFilterChange({
       ...filters,
@@ -25,13 +52,19 @@ export default function ProductFilters({ filters, onFilterChange }: ProductFilte
           select
           fullWidth
           label="Category"
-          value={filters.category}
-          onChange={(e) => handleChange("category", e.target.value)}
+          value={filters.categoryId || ""}
+          onChange={(e) => handleChange("categoryId", e.target.value)}
+          disabled={loading}
         >
-          <MenuItem value="">All Categories</MenuItem>
           {categories.map((category) => (
-            <MenuItem key={category} value={category}>
-              {category}
+            <MenuItem key={category._id} value={category._id}>
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: category.color }}
+                ></div>
+                {category.name}
+              </div>
             </MenuItem>
           ))}
         </TextField>

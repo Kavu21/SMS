@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     const limit = Number.parseInt(searchParams.get("limit") || "10")
 
     // Advanced filters
-    const category = searchParams.get("category")
+    const categoryId = searchParams.get("categoryId")
     const gsmMin = searchParams.get("gsmMin")
     const gsmMax = searchParams.get("gsmMax")
     const rollNo = searchParams.get("rollNo")
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
        status: "available"
     }
 
-    if (category) query.category = category
+    if (categoryId) query.categoryId = categoryId
     if (gsmMin || gsmMax) {
       query.gsm = {}
       if (gsmMin) query.gsm.$gte = Number(gsmMin)
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
 
     // Get products with pagination
     const [products, total] = await Promise.all([
-      Product.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      Product.find(query).populate('categoryId', 'name color').sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
       Product.countDocuments(query),
     ])
 

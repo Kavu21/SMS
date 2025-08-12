@@ -93,7 +93,19 @@ export default function ProductsTable({
                 <TableCell>{product.name}</TableCell>
                 <TableCell>{product.rollNo}</TableCell>
                 <TableCell>{product.reelNo}</TableCell>
-                <TableCell>{product.category}</TableCell>
+                <TableCell>
+                  {product.category ? (
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: product.category.color }}
+                      ></div>
+                      {product.category.name}
+                    </div>
+                  ) : (
+                    "—"
+                  )}
+                </TableCell>
                 <TableCell>{product.gsm}</TableCell>
                 <TableCell>{product.weight} kg</TableCell>
                 <TableCell>

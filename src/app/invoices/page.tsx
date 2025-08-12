@@ -32,7 +32,6 @@ export default function InvoicesPage() {
       if (!res.ok) throw new Error("Failed to fetch invoices")
 
       const data = await res.json()
-      console.log("<<<data", data)
       setInvoices(data.invoices)
       setTotal(data.pagination.total)
     } catch (err) {

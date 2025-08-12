@@ -45,9 +45,10 @@ const productSchema = new mongoose.Schema({
     required: true,
     enum: ["pieces", "kg"],
   },
-  category: {
-    type: String,
+  categoryId: {
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
+    ref: "Category",
   },
   status: {
     type: String,
